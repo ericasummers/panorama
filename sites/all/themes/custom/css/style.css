@@ -1,0 +1,18 @@
+html {
+  font-family: 'PT Serif', serif;
+  background: linear-gradient(#567067, #30403A);
+  width: 100%;
+  min-height: 100%;
+  color: white;
+}
+
+#header {
+  font-family: 'Satisfy', cursive;
+  background: url('../images/dawn2_by_wlop-small.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 100%;
+  background-position: absolute;
+  top: 0;
+  height: 300px;
+}
