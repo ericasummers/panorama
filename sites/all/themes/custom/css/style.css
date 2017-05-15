@@ -6,6 +6,18 @@ html {
   color: white;
 }
 
+a {
+  color: #C1C7C4;
+}
+
+a:hover {
+  color: #E0E5E3;
+}
+
+#mainmenusection {
+  background-color: #757977;
+}
+
 #header {
   font-family: 'Satisfy', cursive;
   background: url('../images/dawn2_by_wlop-small.jpg');

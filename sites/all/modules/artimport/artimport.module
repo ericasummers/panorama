@@ -1,0 +1,14 @@
+<?php
+  function artimport_menu() {
+    $items['browse'] = array(
+      'title' => 'Begin Browsing',
+      'page callback' => 'browse_art',
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+  }
+
+  function browse_art() {
+    
+  }

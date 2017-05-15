@@ -1,0 +1,5 @@
+name = Deviantart Import Module
+description = Module to import deviantart galleries and suggest art for visitors.
+core = 7.x
+package = Custom Modules
+files[] = artimport.module
