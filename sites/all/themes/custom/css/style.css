@@ -14,7 +14,27 @@ a:hover {
   color: #E0E5E3;
 }
 
+#breadcrumb {
+  display: none;
+}
+
+#block-user-login {
+  width: 400px;
+  padding: 15px;
+  border: solid 1px white;
+  border-radius: 10px;
+  background-color: #757977;
+  margin: 0 auto;
+}
+
+#block-system-navigation {
+
+}
+
 #mainmenusection {
+  text-align: right;
+  top: 0;
+  font-family: 'PT Serif', serif;
   background-color: #757977;
 }
 
@@ -25,6 +45,6 @@ a:hover {
   background-size: 100%;
   width: 100%;
   background-position: absolute;
-  top: 0;
+  top: 300px;
   height: 300px;
 }

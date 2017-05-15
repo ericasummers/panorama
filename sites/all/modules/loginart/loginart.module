@@ -1,0 +1,21 @@
+<?php
+  function loginart_menu() {
+    $items['loginchoice'] = array(
+      'title' => 'Start Browsing!',
+      'page callback' => 'intro_choice',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+    return $items;
+  }
+
+  function loginart_user_login(&$edit, $account) {
+    $_GET['destination'] = 'loginchoice';
+  }
+
+  function intro_choice() {
+    // $current_view = views_get_view('art_comparison');
+    // $current_view->display['art_comparison']->display_options['enabled'] = TRUE;
+    // views_save_view($current_view);
+    return '<p>View works</p>';
+  }
