@@ -35,14 +35,15 @@
     $artpiece2_nid = 2;
     $artpiece2_node = node_load($artpiece2_nid);
 
+    $formoptions = array(
+      '<img class="art-compares" src="' . file_create_url($artpiece1_node->field_artwork_image['und'][0]['uri']) . '">',
+      '<img class="art-compares" src="' . file_create_url($artpiece2_node->field_artwork_image['und'][0]['uri']) . '">',
+    );
 
     $form['choice'] = array(
       '#title' => 'Pick Your Favorite',
       '#type' => 'radios',
-      '#options' => array(
-        '<img class="art-compares" src="' . file_create_url($artpiece1_node->field_artwork_image['und'][0]['uri']) . '">',
-        '<img class="art-compares" src="' . file_create_url($artpiece2_node->field_artwork_image['und'][0]['uri']) . '">',
-      ),
+      '#options' => $formoptions,
       '#required' => TRUE,
     );
     $form['submit'] = array(
@@ -53,6 +54,14 @@
   }
 
   function intro_choice_submit($form, &$form_state) {
+    global $user;
+    $userobject = user_load($user->uid);
+    $user_artists = $userobject->field_favorite_artists;
+    $artworknodeoptions = array(1, 2);
+    $chosen_art_option = node_load($artworknodeoptions[($form_state['values']['choice'])]);
+    $current_artist = $chosen_art_option->field_artist['und'][0]['value'];
+    array_push($user_artists, $current_artist);
+    user_save($userobject);
     $form_state['redirect'] = 'browse';
   }
 
