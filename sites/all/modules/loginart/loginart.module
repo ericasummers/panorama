@@ -29,20 +29,19 @@
     //Load first two images as choices to compare
     $artpiece1_nid = 1;
     $artpiece1_node = node_load($artpiece1_nid);
-    $image1 = field_get_items('node', $artpiece1_node, 'field_artwork_image');
-    $output = field_view_value('node', $artpiece1_node, 'field_image', $image1[0],
-      array(
-        'type' => 'image',
-      ));
+
+    $artpiece1_imagepath = image_style_url('art-compares', $artpiece1_node->field_artwork_image[$artpiece1_node->language][0]['uri']);
+
     $artpiece2_nid = 2;
     $artpiece2_node = node_load($artpiece2_nid);
+
 
     $form['choice'] = array(
       '#title' => 'Pick Your Favorite',
       '#type' => 'radios',
       '#options' => array(
-        '<img class="art-compares" src="' . field_view_field('node', $artpiece1_node, 'field_artwork_image') . '">',
-        '<img class="art-compares" src="http://orig06.deviantart.net/9fc5/f/2016/201/1/b/vocruen___quick_piece_for_patreon_by_shilin-daap240.png">',
+        '<img class="art-compares" src="' . file_create_url($artpiece1_node->field_artwork_image['und'][0]['uri']) . '">',
+        '<img class="art-compares" src="' . file_create_url($artpiece2_node->field_artwork_image['und'][0]['uri']) . '">',
       ),
       '#required' => TRUE,
     );
@@ -58,5 +57,5 @@
   }
 
   function gallery1() {
-    return '<p>Gallery1</p>' . print render(field_view_field('node', $artpiece1_node, 'field_artwork_image'));
+    return '<p>Gallery1</p>';
   }

@@ -48,3 +48,17 @@ a:hover {
   top: 300px;
   height: 300px;
 }
+
+.art-compares {
+  max-width: 500px;
+  max-height: 500px;
+}
+
+.form-radios .form-item {
+  float: left;
+  width: 50%;
+}
+
+.form-item label.option {
+  display: inline;
+}
