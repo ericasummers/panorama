@@ -2,7 +2,14 @@
   function loginart_menu() {
     $items['loginchoice'] = array(
       'title' => 'Start Browsing!',
-      'page callback' => 'intro_choice',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('intro_choice'),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+    $items['browse'] = array(
+      'title' => 'Browse',
+      'page callback' => 'gallery1',
       'access callback' => TRUE,
       'type' => MENU_CALLBACK,
     );
@@ -14,8 +21,42 @@
   }
 
   function intro_choice() {
+    //(Show comparison view?)
     // $current_view = views_get_view('art_comparison');
     // $current_view->display['art_comparison']->display_options['enabled'] = TRUE;
     // views_save_view($current_view);
-    return '<p>View works</p>';
+
+    //Load first two images as choices to compare
+    $artpiece1_nid = 1;
+    $artpiece1_node = node_load($artpiece1_nid);
+    $image1 = field_get_items('node', $artpiece1_node, 'field_artwork_image');
+    $output = field_view_value('node', $artpiece1_node, 'field_image', $image1[0],
+      array(
+        'type' => 'image',
+      ));
+    $artpiece2_nid = 2;
+    $artpiece2_node = node_load($artpiece2_nid);
+
+    $form['choice'] = array(
+      '#title' => 'Pick Your Favorite',
+      '#type' => 'radios',
+      '#options' => array(
+        '<img class="art-compares" src="' . field_view_field('node', $artpiece1_node, 'field_artwork_image') . '">',
+        '<img class="art-compares" src="http://orig06.deviantart.net/9fc5/f/2016/201/1/b/vocruen___quick_piece_for_patreon_by_shilin-daap240.png">',
+      ),
+      '#required' => TRUE,
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Save my choice!'
+    );
+    return $form;
+  }
+
+  function intro_choice_submit($form, &$form_state) {
+    $form_state['redirect'] = 'browse';
+  }
+
+  function gallery1() {
+    return '<p>Gallery1</p>' . print render(field_view_field('node', $artpiece1_node, 'field_artwork_image'));
   }
