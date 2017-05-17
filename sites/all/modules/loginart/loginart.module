@@ -1,7 +1,6 @@
 <?php
   function loginart_menu() {
     $items['loginchoice'] = array(
-      'title' => 'Start Browsing!',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('intro_choice'),
       'access callback' => TRUE,
