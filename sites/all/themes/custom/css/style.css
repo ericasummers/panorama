@@ -23,26 +23,33 @@ a:hover {
 }
 
 #mainmenusection {
+  font-family: 'Satisfy', cursive;
+  background-color: #757977;
+  background: url('../images/banner.jpg');
   text-align: right;
   top: 0;
-  font-family: 'PT Serif', serif;
-  background-color: #757977;
+  height: 200px;
+  background-position: absolute;
+  background-size: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  /*font-family: 'PT Serif', serif;*/
+  font-size: 150%;
 }
 
 #header {
   font-family: 'Satisfy', cursive;
-  background: url('../images/dawn2_by_wlop-small.jpg');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  width: 100%;
-  background-position: absolute;
+  background-color: #757977;
   top: 200px;
-  height: 200px;
 }
 
 .art-compares {
   max-width: 500px;
   max-height: 500px;
+}
+
+.art-compares:hover {
+  opacity: 0.5;
 }
 
 .browse-gallery {
@@ -69,9 +76,9 @@ a:hover {
   display: inline;
 }
 
-/*input[type="radio"] {
+input[type="radio"] {
     display: none;
 }
 input[type="radio"]:checked + img {
-    border: 1px solid red;
-}*/
+  opacity: 0.5;
+}
