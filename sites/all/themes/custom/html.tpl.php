@@ -46,6 +46,10 @@
   "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $language->language; ?>" version="XHTML+RDFa 1.0" dir="<?php print $language->dir; ?>"<?php print $rdf_namespaces; ?>>
 <link href="https://fonts.googleapis.com/css?family=PT+Serif|Satisfy" rel="stylesheet">
+<!-- Display different css on homepage -->
+  <?php if (drupal_is_front_page()) {
+    drupal_add_css(path_to_theme() . "/sites/all/themes/custom/css/introstyle.css", 'theme', 'all');
+  } ?>
 
 <head profile="<?php print $grddl_profile; ?>">
   <?php print $head; ?>

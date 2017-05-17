@@ -62,3 +62,10 @@ a:hover {
 .form-item label.option {
   display: inline;
 }
+
+/*input[type="radio"] {
+    display: none;
+}
+input[type="radio"]:checked + img {
+    border: 1px solid red;
+}*/

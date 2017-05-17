@@ -60,11 +60,27 @@
     $artworknodeoptions = array(1, 2);
     $chosen_art_option = node_load($artworknodeoptions[($form_state['values']['choice'])]);
     $current_artist = $chosen_art_option->field_artist['und'][0]['value'];
+    $_SESSION['current_artist'] = current_artist_object_from_image(define);
     array_push($user_artists, $current_artist);
     user_save($userobject);
     $form_state['redirect'] = 'browse';
   }
 
   function gallery1() {
+    $new_gallery = array();
+    $query_art = db_select('node', 'n')
+            ->Fields('N', array('nid', 'title'))
+            ->condition('type', 'art_piece');
+        $result = $query_art->execute();
+        foreach($result as $art_piece) {
+            $node = node_load($art_piece->nid);
+            $art_tags = explode(', ', $node->field_art_tags[$node->language][0]['value']);
+            $current_tags = explode(', ', $_SESSION['current_artist']->field_art_tags['und'][0]['value']);
+            if (array_intersect($current_tags, $art_tags)) {
+              array_push($new_gallery, $node->nid);
+              //push into array and then display first twenty with matching tags in gallery
+            }
+            node_save($node);
+        }
     return '<p>Gallery1</p>';
   }
