@@ -57,7 +57,7 @@
     $_SESSION['current_artist'] = $current_artist;
     array_push($user_artists, $current_artist);
     user_save($userobject);
-    $form_state['redirect'] = 'browse';
+    $form_state['redirect'] = 'gallery';
   }
 
   function gallery1() {
