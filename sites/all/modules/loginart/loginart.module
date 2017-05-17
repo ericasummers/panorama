@@ -6,12 +6,12 @@
       'access callback' => TRUE,
       'type' => MENU_CALLBACK,
     );
-    // $items['browse'] = array(
-    //   'title' => 'Browse',
-    //   'page callback' => 'gallery1',
-    //   'access callback' => TRUE,
-    //   'type' => MENU_CALLBACK,
-    // );
+    $items['browse'] = array(
+      'title' => 'Browse',
+      'page callback' => 'gallery1',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
     return $items;
   }
 
@@ -50,13 +50,15 @@
     global $user;
     $userobject = user_load($user->uid);
     $user_artists = $userobject->field_favorite_artists;
+    $_SESSION['userartist'] = $userobject;
     $artworknodeoptions = array(1, 2);
     $chosen_art_option = node_load($artworknodeoptions[($form_state['values']['choice'])]);
     $current_artist = $chosen_art_option->field_artist;
     $_SESSION['current_artist'] = $current_artist;
     array_push($user_artists, $current_artist);
     user_save($userobject);
-    $form_state['redirect'] = 'gallery';
+    // $form_state['redirect'] = 'gallery';
+    $form_state['redirect'] = 'browse';
   }
 
   function gallery1() {
@@ -77,5 +79,5 @@
     //     for ($new_gallery as $gallery_item) {
     //
     //     }
-    return '<p>Gallery:</p>';
+    return '<p>Gallery:</p>' . var_dump($_SESSION['userartist']);
   }

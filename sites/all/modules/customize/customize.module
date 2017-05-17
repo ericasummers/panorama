@@ -1,0 +1,113 @@
+<?php
+  function customize_menu() {
+    $items['customize'] = array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('customize_quiz'),
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
+    );
+    $items['quiz2'] = array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('quiz_2'),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+    $items['quiz3'] = array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('quiz_3'),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+    return $items;
+  }
+
+  function customize_quiz() {
+    $artpiece22_node = node_load(22);
+    $artpiece27_node = node_load(27);
+
+    $firstoptions = array(
+      '<img class="art-quiz" src="' . file_create_url($artpiece22_node->field_artwork_image['und'][0]['uri']) . '">',
+      '<img class="art-quiz" src="' . file_create_url($artpiece27_node->field_artwork_image['und'][0]['uri']) . '">',
+    );
+
+    $form['choice'] = array(
+      '#title' => 'I prefer:',
+      '#type' => 'radios',
+      '#options' => $firstoptions,
+      '#required' => TRUE,
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Next'
+    );
+    return $form;
+  }
+
+  function customize_quiz_submit($form, &$form_state) {
+    $_SESSION['firstchoice'] = $form_state['values']['choice'];
+    $form_state['redirect'] = 'quiz2';
+  }
+
+  function quiz_2() {
+    if ($_SESSION['first_choice'] = 0) {
+      $artpiece1_node = node_load(32);
+      $artpiece2_node = node_load(31);
+    } else {
+      $artpiece1_node = node_load(25);
+      $artpiece2_node = node_load(20);
+    }
+
+    $secondoptions = array(
+      '<img class="art-quiz" src="' . file_create_url($artpiece1_node->field_artwork_image['und'][0]['uri']) . '">',
+      '<img class="art-quiz" src="' . file_create_url($artpiece2_node->field_artwork_image['und'][0]['uri']) . '">',
+    );
+
+    $form['choice2'] = array(
+      '#title' => 'I prefer:',
+      '#type' => 'radios',
+      '#options' => $secondoptions,
+      '#required' => TRUE,
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Next'
+    );
+    return $form;
+  }
+
+  function quiz_2_submit($form, &$form_state) {
+    $_SESSION['second_choice'] = $form_state['values']['choice2'];
+    $form_state['redirect'] = 'quiz3';
+  }
+
+  function quiz_3() {
+    if ($_SESSION['first_choice'] = 0) {
+      $artpiece1_node = node_load(32);
+      $artpiece2_node = node_load(31);
+    } else {
+      $artpiece1_node = node_load(25);
+      $artpiece2_node = node_load(20);
+    }
+
+    $thirdoptions = array(
+      '<img class="art-quiz" src="' . file_create_url($artpiece1_node->field_artwork_image['und'][0]['uri']) . '">',
+      '<img class="art-quiz" src="' . file_create_url($artpiece2_node->field_artwork_image['und'][0]['uri']) . '">',
+    );
+
+    $form['choice3'] = array(
+      '#title' => 'I prefer:',
+      '#type' => 'radios',
+      '#options' => $thirdoptions,
+      '#required' => TRUE,
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Next'
+    );
+    return $form;
+  }
+
+  function quiz_3_submit($form, &$form_state) {
+    $_SESSION['third_choice'] = $form_state['values']['choice3'];
+    $form_state['redirect'] = 'quiz4';
+  }
