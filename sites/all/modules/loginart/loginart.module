@@ -7,12 +7,12 @@
       'access callback' => TRUE,
       'type' => MENU_CALLBACK,
     );
-    $items['browse'] = array(
-      'title' => 'Browse',
-      'page callback' => 'gallery1',
-      'access callback' => TRUE,
-      'type' => MENU_CALLBACK,
-    );
+    // $items['browse'] = array(
+    //   'title' => 'Browse',
+    //   'page callback' => 'gallery1',
+    //   'access callback' => TRUE,
+    //   'type' => MENU_CALLBACK,
+    // );
     return $items;
   }
 
@@ -21,16 +21,10 @@
   }
 
   function intro_choice() {
-    //(Show comparison view?)
-    // $current_view = views_get_view('art_comparison');
-    // $current_view->display['art_comparison']->display_options['enabled'] = TRUE;
-    // views_save_view($current_view);
-
     //Load first two images as choices to compare
     $artpiece1_nid = 1;
     $artpiece1_node = node_load($artpiece1_nid);
-
-    $artpiece1_imagepath = image_style_url('art-compares', $artpiece1_node->field_artwork_image[$artpiece1_node->language][0]['uri']);
+    // $artpiece1_imagepath = image_style_url('art-compares', $artpiece1_node->field_artwork_image[$artpiece1_node->language][0]['uri']);
 
     $artpiece2_nid = 2;
     $artpiece2_node = node_load($artpiece2_nid);
@@ -59,28 +53,30 @@
     $user_artists = $userobject->field_favorite_artists;
     $artworknodeoptions = array(1, 2);
     $chosen_art_option = node_load($artworknodeoptions[($form_state['values']['choice'])]);
-    $current_artist = $chosen_art_option->field_artist['und'][0]['value'];
-    $_SESSION['current_artist'] = current_artist_object_from_image(define);
+    $current_artist = $chosen_art_option->field_artist;
+    $_SESSION['current_artist'] = $current_artist;
     array_push($user_artists, $current_artist);
     user_save($userobject);
     $form_state['redirect'] = 'browse';
   }
 
   function gallery1() {
-    $new_gallery = array();
-    $query_art = db_select('node', 'n')
-            ->Fields('N', array('nid', 'title'))
-            ->condition('type', 'art_piece');
-        $result = $query_art->execute();
-        foreach($result as $art_piece) {
-            $node = node_load($art_piece->nid);
-            $art_tags = explode(', ', $node->field_art_tags[$node->language][0]['value']);
-            $current_tags = explode(', ', $_SESSION['current_artist']->field_art_tags['und'][0]['value']);
-            if (array_intersect($current_tags, $art_tags)) {
-              array_push($new_gallery, $node->nid);
-              //push into array and then display first twenty with matching tags in gallery
-            }
-            node_save($node);
-        }
-    return '<p>Gallery1</p>';
+    // $new_gallery = array();
+    // $query_art = db_select('node', 'n')
+    //         ->Fields('N', array('nid', 'title'))
+    //         ->condition('type', 'art_piece');
+    //     $result = $query_art->execute();
+    //     foreach($result as $art_piece) {
+    //         $node = node_load($art_piece->nid);
+    //         $art_tags = explode(', ', $node->field_art_tags[$node->language][0]['value']);
+    //         $current_tags = explode(', ', ($_SESSION['current_artist']->field_art_tags['und'][0]['value']));
+    //         if (array_intersect($current_tags, $art_tags)) {
+    //           //push into array and then display first few with matching tags in gallery
+    //           array_push($new_gallery, $node->nid);
+    //         }
+    //     }
+    //     for ($new_gallery as $gallery_item) {
+    //
+    //     }
+    return '<p>Gallery:</p>';
   }
