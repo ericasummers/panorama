@@ -18,10 +18,16 @@
       'access callback' => TRUE,
       'type' => MENU_CALLBACK,
     );
+    $items['results'] = array(
+      'page callback' => 'art_query',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
     return $items;
   }
 
   function customize_quiz() {
+    $_SESSION['user_tags'] = array();
     $artpiece22_node = node_load(22);
     $artpiece27_node = node_load(27);
 
@@ -44,17 +50,19 @@
   }
 
   function customize_quiz_submit($form, &$form_state) {
-    $_SESSION['firstchoice'] = $form_state['values']['choice'];
+    $_SESSION['first_choice'] = $form_state['values']['choice'];
     $form_state['redirect'] = 'quiz2';
   }
 
   function quiz_2() {
-    if ($_SESSION['first_choice'] = 0) {
+    if ($_SESSION['first_choice'] == 0) {
       $artpiece1_node = node_load(32);
       $artpiece2_node = node_load(31);
-    } else {
+      array_push($_SESSION['user_tags'], 'landscape');
+    } else if ($_SESSION['first_choice'] == 1){
       $artpiece1_node = node_load(25);
       $artpiece2_node = node_load(20);
+      array_push($_SESSION['user_tags'], 'portrait');
     }
 
     $secondoptions = array(
@@ -81,12 +89,22 @@
   }
 
   function quiz_3() {
-    if ($_SESSION['first_choice'] = 0) {
-      $artpiece1_node = node_load(32);
-      $artpiece2_node = node_load(31);
-    } else {
-      $artpiece1_node = node_load(25);
-      $artpiece2_node = node_load(20);
+    if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 0) {
+      $artpiece1_node = node_load(18);
+      $artpiece2_node = node_load(30);
+      array_push($_SESSION['user_tags'], 'colorful');
+    } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 1) {
+      $artpiece1_node = node_load(21);
+      $artpiece2_node = node_load(23);
+      array_push($_SESSION['user_tags'], 'majestic');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 0) {
+      $artpiece1_node = node_load(21);
+      $artpiece2_node = node_load(19);
+      array_push($_SESSION['user_tags'], 'stylized');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 1) {
+      $artpiece1_node = node_load(24);
+      $artpiece2_node = node_load(16);
+      array_push($_SESSION['user_tags'], 'anime');
     }
 
     $thirdoptions = array(
@@ -109,5 +127,56 @@
 
   function quiz_3_submit($form, &$form_state) {
     $_SESSION['third_choice'] = $form_state['values']['choice3'];
-    $form_state['redirect'] = 'quiz4';
+    if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 0) {
+      array_push($_SESSION['user_tags'], 'illustration');
+    } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 1) {
+      array_push($_SESSION['user_tags'], 'nature');
+    } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 0) {
+      array_push($_SESSION['user_tags'], 'illustration');
+    } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 1) {
+      array_push($_SESSION['user_tags'], 'bright');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 0) {
+      array_push($_SESSION['user_tags'], 'sketch');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 1) {
+      array_push($_SESSION['user_tags'], 'concept art');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 0) {
+      array_push($_SESSION['user_tags'], 'concept');
+    } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 1) {
+      array_push($_SESSION['user_tags'], 'painting');
+    }
+    $form_state['redirect'] = 'results';
+  }
+
+  function art_query() {
+    $access_token = '';
+    $token_call = 'https://www.deviantart.com/oauth2/token?client_id=6265&client_secret=144e2602cbd778cc9bb213976ea3fe4e&grant_type=client_credentials';
+    $token_result = file_get_contents($token_call);
+    $result_token_array = json_decode($token_result, TRUE);
+    if(empty($result_token_array['access_token'] === 'false')) {
+      $access_token = $result_token_array['access_token'];
+    }
+
+    if ($access_token) {
+      $search_parameter = $_SESSION['user_tags'][(rand(0, 2))];
+
+      $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $access_token . 'q=' . $search_parameter . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations';
+      $result_string = file_get_contents($api_call);
+      $result_array = json_decode($result_string, TRUE);
+      if(empty($result_array['results'] === 'false')) {
+        for ($i = 0; $i < count($result_array['results']); $i++) {
+          $title = $result_array['results'][$i]['title'];
+          $url = $result_array['results'][$i]['url'];
+          $artist = $result_array['results'][$i]['author']['username'];
+          $image = $result_array['results'][$i]['preview']['src'];
+
+          $output=$output.<<<EOD
+            <h2>$title by $artist</h2>
+            <img src=$image>
+            <h4>Link: $url </h4>
+EOD;
+        }
+      } else {
+        $output = "Sorry no results";
+      }
+    }
   }
