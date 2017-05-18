@@ -27,6 +27,14 @@
   }
 
   function customize_quiz() {
+    $token_call = 'https://www.deviantart.com/oauth2/token?client_id=6265&client_secret=144e2602cbd778cc9bb213976ea3fe4e&grant_type=client_credentials';
+    // test call works - $test_call = file_get_contents('http://api.tvmaze.com/shows/13');
+    //Token call below does not work
+    // $token_result = file_get_contents($token_call);
+    // $result_token_array = json_decode($token_result, TRUE);
+    // $access_token = $result_token_array['access_token'];
+    // $_SESSION['access_token'] = $access_token;
+
     $_SESSION['user_tags'] = array();
     $artpiece22_node = node_load(22);
     $artpiece27_node = node_load(27);
@@ -148,35 +156,43 @@
   }
 
   function art_query() {
-    $access_token = '';
-    $token_call = 'https://www.deviantart.com/oauth2/token?client_id=6265&client_secret=144e2602cbd778cc9bb213976ea3fe4e&grant_type=client_credentials';
-    $token_result = file_get_contents($token_call);
-    $result_token_array = json_decode($token_result, TRUE);
-    if(empty($result_token_array['access_token'] === 'false')) {
-      $access_token = $result_token_array['access_token'];
-    }
+    $search_parameter = $_SESSION['user_tags'][(rand(0, 2))];
+    // $search_parameter = 'nature';
+    $_SESSION['access_token'] = 'b5c38fcc4e83b0353ef345ab8fa9402901575730809cf39f73';
 
-    if ($access_token) {
-      $search_parameter = $_SESSION['user_tags'][(rand(0, 2))];
+    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&q=' . $search_parameter . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations';
+    $result_string = file_get_contents($api_call);
+    $result_array = json_decode($result_string, TRUE);
+    var_dump($result_array);
+//     foreach ($result_array as $result) {
+//       $title = $result_array['results'][$i]['title'];
+//       $url = $result_array['results'][$i]['url'];
+//       $artist = $result_array['results'][$i]['author']['username'];
+//       $image = $result_array['results'][$i]['preview']['src'];
+//
+//       $output=$output.<<<EOD
+//         <h2>$title by $artist</h2>
+//         <img src=' . $image . '>
+//         <h4>Link: $url </h4>
+// EOD;
+//     }
 
-      $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $access_token . 'q=' . $search_parameter . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations';
-      $result_string = file_get_contents($api_call);
-      $result_array = json_decode($result_string, TRUE);
-      if(empty($result_array['results'] === 'false')) {
-        for ($i = 0; $i < count($result_array['results']); $i++) {
-          $title = $result_array['results'][$i]['title'];
-          $url = $result_array['results'][$i]['url'];
-          $artist = $result_array['results'][$i]['author']['username'];
-          $image = $result_array['results'][$i]['preview']['src'];
 
-          $output=$output.<<<EOD
-            <h2>$title by $artist</h2>
-            <img src=$image>
-            <h4>Link: $url </h4>
-EOD;
-        }
-      } else {
-        $output = "Sorry no results";
-      }
-    }
+//     if(empty($result_array['results'] === 'false')) {
+//       for ($i = 0; $i < count($result_array['results']); $i++) {
+//         $title = $result_array['results'][$i]['title'];
+//         $url = $result_array['results'][$i]['url'];
+//         $artist = $result_array['results'][$i]['author']['username'];
+//         $image = $result_array['results'][$i]['preview']['src'];
+//
+//         $output=$output.<<<EOD
+//           <h2>$title by $artist</h2>
+//           <img src=$image>
+//           <h4>Link: $url </h4>
+// EOD;
+//       }
+//     } else {
+//       $output = "Sorry no results";
+//     }
+    // return $output;
   }

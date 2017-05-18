@@ -1,5 +1,5 @@
 name = Preference Questionnaire
-description = Questionnaire to determine user preferences for artists.
+description = Login questionnaire to determine query and what art pieces to display to each user.
 core = 7.x
 package = Custom Modules
 files[] = customize.module
