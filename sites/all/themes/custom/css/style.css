@@ -33,7 +33,6 @@ a:hover {
   background-size: 100%;
   width: 100%;
   background-repeat: no-repeat;
-  /*font-family: 'PT Serif', serif;*/
   font-size: 150%;
   text-decoration: none;
 }
@@ -92,4 +91,9 @@ input[type="radio"] {
 }
 input[type="radio"]:checked + img {
   opacity: 0.5;
+}
+
+.image-results {
+  max-width: 500px;
+  max-height: 500px;
 }
