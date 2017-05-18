@@ -26,6 +26,10 @@
     return $items;
   }
 
+  function customize_user_login(&$edit, $account) {
+    $_GET['destination'] = 'customize';
+  }
+
   function customize_quiz() {
     $options = array(
       'headers' => array(
@@ -173,7 +177,7 @@
         'access_token' => $_SESSION['access_token'],
         'offset' => '10',
         'limit' => '100',
-        'category_path' => 'digitalart/paintings/illustrations/conceptual',
+        'category_path' => 'digitalart/paintings/illustrations',
         'mature_content' => 'false',
       ),
       'method' => 'GET',
@@ -182,7 +186,7 @@
       'context' => NULL,
     );
 
-    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations/conceptual&mature_content=false';
+    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations&mature_content=false';
 
     $response = drupal_http_request($api_call, $options);
     $result_array = json_decode($response->data, TRUE);
