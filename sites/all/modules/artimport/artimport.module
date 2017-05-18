@@ -1,14 +1,69 @@
 <?php
   function artimport_menu() {
-    $items['browse'] = array(
-      'title' => 'Begin Browsing',
-      'page callback' => 'browse_art',
+    $items['gallery'] = array(
+      'title' => 'Gallery',
+      'page callback' => 'artimport_query',
       'access callback' => TRUE,
       'type' => MENU_NORMAL_ITEM,
     );
     return $items;
   }
 
-  function browse_art() {
-    
+  function artimport_query() {
+    $options = array(
+      'headers' => array(
+        'client_id' => '6265',
+        'client_secret' => '144e2602cbd778cc9bb213976ea3fe4e',
+        'grant_type' => 'client_credentials',
+      ),
+      'method' => 'GET',
+      'max_redirects' => 3,
+      'timeout' => 30.0,
+      'context' => NULL,
+    );
+
+    $token_call = 'https://www.deviantart.com/oauth2/token?client_id=6265&client_secret=144e2602cbd778cc9bb213976ea3fe4e&grant_type=client_credentials';
+
+    $response = drupal_http_request($token_call, $options);
+    $result_array = json_decode($response->data, TRUE);
+    $_SESSION['access_token'] = $result_array['access_token'];
+
+    $options = array(
+      'headers' => array(
+        'access_token' => $_SESSION['access_token'],
+        'offset' => '0',
+        'limit' => '100',
+        'category_path' => 'digitalart/paintings',
+        'mature_content' => 'false',
+      ),
+      'method' => 'GET',
+      'max_redirects' => 3,
+      'timeout' => 30.0,
+      'context' => NULL,
+    );
+
+    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&offset=0&limit=100&category_path=digitalart/paintings&mature_content=false';
+
+    $response = drupal_http_request($api_call, $options);
+    $result_array = json_decode($response->data, TRUE);
+
+    if(empty($result_array['results'] === 'false')) {
+      $output = '';
+      for ($i = 0; $i < count($result_array['results']); $i++) {
+        $title = $result_array['results'][$i]['title'];
+        $url = $result_array['results'][$i]['url'];
+        $artist = $result_array['results'][$i]['author']['username'];
+        $image = $result_array['results'][$i]['preview']['src'];
+
+        $output= $output.
+        '<div class="result-image-block">
+          <h4><a href=' . $url . '>' . $title . ' by ' . $artist .'</a></h4>
+          <img class="image-results" src="'. $image .'">
+          <p><button class="love">Like</button>&nbsp;&nbsp;<button class="save-artist">Save Artist</button></p>
+          </div>';
+      }
+    } else {
+      $output = "Sorry no results";
+    }
+    return $output;
   }

@@ -205,6 +205,7 @@
         '<div class="result-image-block">
           <h4><a href=' . $url . '>' . $title . ' by ' . $artist .'</a></h4>
           <img class="image-results" src="'. $image .'">
+          <p><button class="love">Like</button>&nbsp;&nbsp;<button class="save-artist">Save Artist</button></p>
           </div>';
       }
     } else {

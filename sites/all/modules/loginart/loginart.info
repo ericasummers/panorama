@@ -1,5 +1,5 @@
 name = Login Art Choice
-description = Login Art Selection for Authenticated User
+description = Login Art Selection///DISABLED///DISABLED
 core = 7.x
 package = Custom Modules
 files[] = loginart.module

@@ -1,5 +1,5 @@
-name = Deviantart Import Module
-description = Module to import deviantart galleries and suggest art for visitors.
+name = Deviantart Gallery Module
+description = Module to import deviantart gallery for general browsing.
 core = 7.x
 package = Custom Modules
 files[] = artimport.module
