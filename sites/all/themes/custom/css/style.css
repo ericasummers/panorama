@@ -106,7 +106,9 @@ input[type="radio"]:checked + img {
   object-fit: cover;
   width: 300px;
   height: 300px;
-  /*padding: 10px;
-  max-width: 400px;
-  max-height: 400px;*/
+}
+
+.image-results:hover {
+  border: solid 1px white;
+  opacity: 0.7;
 }
