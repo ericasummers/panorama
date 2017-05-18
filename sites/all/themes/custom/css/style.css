@@ -93,7 +93,17 @@ input[type="radio"]:checked + img {
   opacity: 0.5;
 }
 
+.result-image-block {
+  box-sizing: border-box;
+  width: 30%;
+  float: left;
+}
+
 .image-results {
-  max-width: 500px;
-  max-height: 500px;
+  object-fit: cover;
+  width: 300px;
+  height: 300px;
+  /*padding: 10px;
+  max-width: 400px;
+  max-height: 400px;*/
 }

@@ -145,35 +145,36 @@
 
   function quiz_3_submit($form, &$form_state) {
     $_SESSION['third_choice'] = $form_state['values']['choice3'];
+
     if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 0) {
-      array_push($_SESSION['user_tags'], 'illustration');
+      $_SESSION['search_parameter'] = 'technical';
     } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 1) {
-      array_push($_SESSION['user_tags'], 'nature');
+      $_SESSION['search_parameter'] = 'conceptual';
     } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 0) {
-      array_push($_SESSION['user_tags'], 'illustration');
+      $_SESSION['search_parameter'] = 'technical';
     } else if ($_SESSION['first_choice'] == 0 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 1) {
-      array_push($_SESSION['user_tags'], 'bright');
+      $_SESSION['search_parameter'] = 'conceptual';
     } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 0) {
-      array_push($_SESSION['user_tags'], 'sketch');
+      $_SESSION['search_parameter'] = 'storybook';
     } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 0 && $_SESSION['third_choice'] == 1) {
-      array_push($_SESSION['user_tags'], 'concept art');
+      $_SESSION['search_parameter'] = 'storybook';
     } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 0) {
-      array_push($_SESSION['user_tags'], 'concept');
+      $_SESSION['search_parameter'] = 'conceptual';
     } else if ($_SESSION['first_choice'] == 1 && $_SESSION['second_choice'] == 1 && $_SESSION['third_choice'] == 1) {
-      array_push($_SESSION['user_tags'], 'painting');
+      $_SESSION['search_parameter'] = 'storybook';
     }
     $form_state['redirect'] = 'results';
   }
 
   function art_query() {
-    $search_parameter = $_SESSION['user_tags'][(rand(0, 2))];
+    $search_parameter = $_SESSION['search_parameter'];
     $options = array(
       'headers' => array(
         'access_token' => $_SESSION['access_token'],
-        'q' => $search_parameter,
         'offset' => '10',
         'limit' => '100',
-        'category_path' => 'digitalart/paintings/illustrations',
+        'category_path' => 'digitalart/paintings/illustrations/conceptual',
+        'mature_content' => 'false',
       ),
       'method' => 'GET',
       'max_redirects' => 3,
@@ -181,7 +182,7 @@
       'context' => NULL,
     );
 
-    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&q=' . $search_parameter . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations';
+    $api_call = 'https://www.deviantart.com/api/v1/oauth2/browse/hot?access_token=' . $_SESSION['access_token'] . '&offset=10&limit=100&category_path=digitalart/paintings/illustrations/conceptual&mature_content=false';
 
     $response = drupal_http_request($api_call, $options);
     $result_array = json_decode($response->data, TRUE);
